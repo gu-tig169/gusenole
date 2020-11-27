@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'model.dart';
 
 class EditTodoView extends StatefulWidget {
-  final Todo todo;
+  final TodoModel todo;
 
   EditTodoView(this.todo);
 
@@ -14,18 +14,18 @@ class EditTodoView extends StatefulWidget {
 }
 
 class EditTodoViewState extends State<EditTodoView> {
-  String todoText;
+  String title;
 
   TextEditingController textEditingController;
 
-  EditTodoViewState(Todo todo) {
-    this.todoText = todo.todoText;
+  EditTodoViewState(TodoModel todo) {
+    this.title = todo.title;
 
-    textEditingController = TextEditingController(text: todo.todoText);
+    textEditingController = TextEditingController(text: todo.title);
 
     textEditingController.addListener(() {
       setState(() {
-        todoText = textEditingController.text;
+        title = textEditingController.text;
       });
     });
   }
@@ -71,7 +71,7 @@ class EditTodoViewState extends State<EditTodoView> {
       children: [
         FlatButton.icon(
           onPressed: () {
-            Navigator.pop(context, Todo(todoText: todoText));
+            Navigator.pop(context, TodoModel(title: title));
           },
           icon: Icon(Icons.add),
           label: Text(
