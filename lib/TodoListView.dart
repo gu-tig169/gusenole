@@ -60,13 +60,13 @@ class _TodoListViewState extends State<TodoListView> {
             context,
             MaterialPageRoute(
                 builder: (context) => EditTodoView(
-                      Todo(
-                        todoText: '',
+                      TodoModel(
+                        title: '',
                       ),
                     )),
           );
           if (newTodo != null) {
-            Provider.of<MyState>(context, listen: false).addTodo(newTodo);
+            Provider.of<MyState>(context, listen: false).addTodoModel(newTodo);
           }
         });
   }
