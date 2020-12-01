@@ -18,7 +18,8 @@ class TodoListView extends StatelessWidget {
         actions: [
           PopupMenuButton(
               onSelected: (value) {
-                Provider.of<MyState>(context, listen: false).setFilterBy(value);
+                Provider.of<MyState>(context, listen: false)
+                    .filterTodoModel(value);
               },
               itemBuilder: (context) => [
                     PopupMenuItem(child: Text('All'), value: 'All'),
@@ -29,16 +30,16 @@ class TodoListView extends StatelessWidget {
       ),
       body: Consumer<MyState>(
         builder: (context, state, child) =>
-            TodoList(_filterList(state.list, state.filterBy)),
+            TodoList(_filter(state.list, state.filterValue)),
       ),
       floatingActionButton: _addTodoButton(context),
     );
   }
 
-  List<TodoModel> _filterList(list, filterBy) {
-    if (filterBy == "Done") {
+  List<TodoModel> _filter(list, filterValue) {
+    if (filterValue == "Done") {
       return list.where((todo) => todo.done == true).toList();
-    } else if (filterBy == "Undone") {
+    } else if (filterValue == "Undone") {
       return list.where((todo) => todo.done == false).toList();
     }
     return list;

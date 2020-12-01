@@ -35,8 +35,8 @@ class MyState extends ChangeNotifier {
   List<TodoModel> _list = [];
   List<TodoModel> get list => _list;
 
-  String _filterBy = 'All';
-  String get filterBy => _filterBy;
+  String _filterValue = 'All';
+  String get filterValue => _filterValue;
 
   Future getTodoModel() async {
     List<TodoModel> list = await Api.getTodoModel();
@@ -62,8 +62,8 @@ class MyState extends ChangeNotifier {
     await getTodoModel();
   }
 
-  void setFilterBy(String filterBy) {
-    this._filterBy = filterBy;
+  void filterTodoModel(String filterValue) {
+    this._filterValue = filterValue;
     notifyListeners();
   }
 }
