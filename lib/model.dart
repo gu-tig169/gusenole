@@ -33,13 +33,14 @@ class TodoModel {
 
 class MyState extends ChangeNotifier {
   List<TodoModel> _list = [];
-
   List<TodoModel> get list => _list;
+
+  String _filterValue = 'All';
+  String get filterValue => _filterValue;
 
   Future getTodoModel() async {
     List<TodoModel> list = await Api.getTodoModel();
     _list = list;
-    print(list);
     notifyListeners();
   }
 
@@ -60,12 +61,8 @@ class MyState extends ChangeNotifier {
     await getTodoModel();
   }
 
-  List<TodoModel> filter(String filterAlternatives) {
-    if (filterAlternatives == "Done") {
-      return _list.where((todo) => todo.done == true).toList();
-    } else if (filterAlternatives == "Undone") {
-      return _list.where((todo) => todo.done == false).toList();
-    }
-    return _list;
+  void filterTodoModel(String filterValue) {
+    this._filterValue = filterValue;
+    notifyListeners();
   }
 }

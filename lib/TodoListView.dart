@@ -5,15 +5,7 @@ import 'EditTodoView.dart';
 import 'TodoList.dart';
 import 'model.dart';
 
-class TodoListView extends StatefulWidget {
-  @override
-  _TodoListViewState createState() => _TodoListViewState();
-}
-
-class _TodoListViewState extends State<TodoListView> {
-  final List<String> filteredAlternatives = ['All', 'Done', 'Undone'];
-  String filterValue;
-
+class TodoListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,32 +15,34 @@ class _TodoListViewState extends State<TodoListView> {
           "TIG169 TODO",
           style: TextStyle(color: Colors.black),
         ),
-        actions: <Widget>[
-          _todoFilter(),
+        actions: [
+          PopupMenuButton(
+              onSelected: (value) {
+                Provider.of<MyState>(context, listen: false)
+                    .filterTodoModel(value);
+              },
+              itemBuilder: (context) => [
+                    PopupMenuItem(child: Text('All'), value: 'All'),
+                    PopupMenuItem(child: Text('Done'), value: 'Done'),
+                    PopupMenuItem(child: Text('Undone'), value: 'Undone'),
+                  ]),
         ],
       ),
       body: Consumer<MyState>(
-        builder: (context, state, child) => TodoList(state.filter(filterValue)),
+        builder: (context, state, child) =>
+            TodoList(_filter(state.list, state.filterValue)),
       ),
       floatingActionButton: _addTodoButton(context),
     );
   }
 
-  Widget _todoFilter() {
-    return PopupMenuButton<String>(
-      onSelected: (String value) {
-        setState(() {
-          filterValue = value;
-        });
-      },
-      itemBuilder: (BuildContext context) {
-        return filteredAlternatives
-            .map((filterAlternatives) => PopupMenuItem(
-                value: filterAlternatives, child: Text(filterAlternatives)))
-            .toList();
-      },
-      icon: Icon(Icons.more_vert, size: 20, color: Colors.black),
-    );
+  List<TodoModel> _filter(list, filterValue) {
+    if (filterValue == "Done") {
+      return list.where((todo) => todo.done == true).toList();
+    } else if (filterValue == "Undone") {
+      return list.where((todo) => todo.done == false).toList();
+    }
+    return list;
   }
 
   Widget _addTodoButton(BuildContext context) {

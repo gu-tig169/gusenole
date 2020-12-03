@@ -11,27 +11,51 @@ class Api {
     var json = todo.toJson();
     var bodyString = jsonEncode(json);
 
-    await http.post('$API_URL/todos?key=$API_KEY',
+    var response = await http.post('$API_URL/todos?key=$API_KEY',
         body: bodyString, headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      return response;
+    } else {
+      print('error on add');
+      return null;
+    }
   }
 
   static Future updateTodo(TodoModel todo, todoId) async {
     var json = todo.toJson();
     var bodyString = jsonEncode(json);
 
-    await http.put('$API_URL/todos/$todoId?key=$API_KEY',
+    var response = await http.put('$API_URL/todos/$todoId?key=$API_KEY',
         body: bodyString, headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      return response;
+    } else {
+      print('error on update');
+      return null;
+    }
   }
 
   static Future removeTodoModel(String todoId) async {
-    await http.delete('$API_URL/todos/$todoId?key=$API_KEY');
+    try {
+      var response = await http.delete('$API_URL/todos/$todoId?key=$API_KEY');
+      if (response.statusCode == 200) {
+        return response;
+      }
+      print('exception on remove');
+    } catch (exception) {
+      throw exception;
+    }
   }
 
   static Future<List<TodoModel>> getTodoModel() async {
-    var response = await http.get('$API_URL/todos?key=$API_KEY');
-    var json = jsonDecode(response.body);
-    return json.map<TodoModel>((data) {
-      return TodoModel.fromJson(data);
-    }).toList();
+    try {
+      var response = await http.get('$API_URL/todos?key=$API_KEY');
+      var json = jsonDecode(response.body);
+      return json.map<TodoModel>((data) {
+        return TodoModel.fromJson(data);
+      }).toList();
+    } catch (exception) {
+      throw exception;
+    }
   }
 }
