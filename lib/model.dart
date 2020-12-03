@@ -41,7 +41,6 @@ class MyState extends ChangeNotifier {
   Future getTodoModel() async {
     List<TodoModel> list = await Api.getTodoModel();
     _list = list;
-    print(list);
     notifyListeners();
   }
 
